@@ -1,0 +1,222 @@
+/* Reset básico */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #f5f5f7;
+    font-family: system-ui, -apple-system, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 16px;
+}
+
+/* Contenedor principal enfocado en 390px */
+.grid-container {
+    width: 100%;
+    max-width: 390px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Dividimos en 2 columnas */
+    gap: 12px; /* Espacio entre tarjetas */
+}
+
+/* Estilos generales de las tarjetas */
+.card {
+    border-radius: 20px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Placeholders para simular el texto y las imágenes con las cruces (X) */
+.card-text {
+    background-color: rgba(0, 0, 0, 0.08);
+    height: 40px;
+    border-radius: 6px;
+    width: 80%;
+}
+
+.card-image {
+    background-color: rgba(0, 0, 0, 0.04);
+    border: 1.5px solid rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    flex-grow: 1;
+    min-height: 100px;
+    position: relative;
+}
+
+
+
+/* --- POSICIONAMIENTO Y COLORES DE LAS TARJETAS --- */
+
+/* Tarjeta 1: Ocupa las 2 columnas arriba. Disposición horizontal. */
+.card-1 {
+    grid-column: span 2;
+    background-color: #e2e2e2;
+    flex-direction: row; 
+}
+.card-1 .card-image { width: 50%; }
+
+/* Tarjeta 2: Columna izquierda, más alta */
+.card-2 {
+    grid-column: 1;
+    grid-row: span 2;
+    background-color: #ffcccc; /* Rojo claro */
+}
+.card-2 .card-image { min-height: 140px; }
+
+/* Tarjeta 3: Columna derecha, cortita */
+.card-3 {
+    grid-column: 2;
+    background-color: #ffe5cc; /* Naranja claro */
+}
+
+/* Tarjeta 4: Columna derecha, más larga */
+.card-4 {
+    grid-column: 2;
+    grid-row: span 2;
+    background-color: #d6f5d6; /* Verde claro */
+}
+.card-4 .card-image { min-height: 180px; }
+
+/* Tarjeta 5: Columna izquierda, abajo de la 2 */
+.card-5 {
+    grid-column: 1;
+    background-color: #cce6ff; /* Azul claro */
+}
+
+/* Tarjeta 6: Ocupa las 2 columnas abajo. Disposición horizontal. */
+.card-6 {
+    grid-column: span 2;
+    background-color: #e5ccff; /* Violeta claro */
+    flex-direction: row;
+}
+.card-6 .card-image { width: 60%; }
+
+/* --- ESTADOS DE INTERACCIÓN --- */
+
+/* Cuando abrimos el modal, agregamos esta clase al contenedor principal con JS */
+.grid-container.dimmed {
+    opacity: 0.3;
+    filter: blur(2px);
+    pointer-events: none; /* Evita que se pueda clickear lo de atrás mientras está abierto */
+}
+
+/* Transición suave para el contenedor cuando cambia de estado */
+.grid-container {
+    transition: opacity 0.4s ease, filter 0.4s ease;
+}
+
+/* Feedback visual al tocar las tarjetas */
+.card {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.card:active {
+    transform: scale(0.98);
+}
+
+
+/* --- CAPA BACKDROP Y MODAL --- */
+
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.1); /* Oscurece un toque el fondo */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+    z-index: 10;
+}
+.backdrop.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -46%) scale(0.92); /* Arranca un poco más abajo y chico */
+    width: calc(100% - 32px);
+    max-width: 358px; /* Calza joya en los 390px del dispositivo */
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Estado activo del modal con efecto de rebote limpio */
+.modal-container.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Estilos internos del contenido del modal */
+.modal-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #1d1d1f;
+}
+
+.modal-reading-time {
+    font-size: 12px;
+    font-weight: 700;
+    color: #1d1d1f;
+    letter-spacing: 0.5px;
+}
+
+.modal-desc {
+    font-size: 14px;
+    color: #434345;
+    line-height: 1.45;
+}
+
+.modal-image {
+    background-color: rgba(0, 0, 0, 0.04);
+    border: 1.5px solid rgba(0, 0, 0, 0.4);
+    border-radius: 16px;
+    height: 320px; /* Alto y estirado como la muestra */
+    position: relative;
+    /* Dibujamos la cruz perfecta de esquina a esquina usando gradientes CSS */
+    background-image: 
+        linear-gradient(to top right, transparent calc(50% - 0.75px), rgba(0,0,0,0.4) calc(50% - 0.75px), rgba(0,0,0,0.4) calc(50% + 0.75px), transparent calc(50% + 0.75px)),
+        linear-gradient(to bottom right, transparent calc(50% - 0.75px), rgba(0,0,0,0.4) calc(50% - 0.75px), rgba(0,0,0,0.4) calc(50% + 0.75px), transparent calc(50% + 0.75px));
+}
+
+/* Botón de cierre sutil superior */
+.close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.05);
+    border: none;
+    font-size: 20px;
+    line-height: 1;
+    color: #434345;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.close-btn:active {
+    background-color: rgba(0, 0, 0, 0.12);
+}
